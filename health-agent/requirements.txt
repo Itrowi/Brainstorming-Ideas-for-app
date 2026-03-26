@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+httpx
+jinja2
+python-dotenv
+beautifulsoup4
+lxml
+starlette-sessions
+itsdangerous
+python-multipart
+openai>=1.0.0
+replicate
+# Optional (for production): gunicorn, prometheus-client, etc.

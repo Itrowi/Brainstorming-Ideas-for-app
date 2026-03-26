@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Health Explainer Agent</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>🏥 Health Agent</h1>
+            </div>
+            <div class="nav-user">
+                <span class="user-info">
+                    <strong>{{ username }}</strong>
+                    <span class="role-badge role-{{ role }}">{{ role | upper }}</span>
+                </span>
+                <a href="/logout" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    {% if role == "admin" or role == "manager" %}
+    <!-- Admin/Manager Dashboard -->
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <h3>Navigation</h3>
+                <ul class="nav-menu">
+                    <li><a href="#text-generation" data-section="text">📝 Text Generation</a></li>
+                    <li><a href="#video-generation" data-section="video">🎬 Video Generation</a></li>
+                    <li><a href="#features" data-section="features">⭐ Features</a></li>
+                </ul>
+            </div>
+
+            <div class="role-info">
+                <h4>Your Role</h4>
+                <p>
+                    {% if role == "admin" %}
+                    <strong>Administrator</strong><br>
+                    <span>Full access to all features</span>
+                    {% elif role == "manager" %}
+                    <strong>Manager</strong><br>
+                    <span>Professional-level explanations</span>
+                    {% endif %}
+                </p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2>Welcome, {{ username | capitalize }}! 👋</h2>
+                <p>Select how you'd like to learn about health topics:</p>
+            </section>
+
+            <!-- Text Generation Section -->
+            <section id="text-generation" class="content-section">
+                <div class="section-header">
+                    <h3>📝 Text Generation</h3>
+                    <p>Get detailed written explanations of health topics</p>
+                </div>
+
+                <form method="post" action="/explain" class="search-form">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            name="topic" 
+                            placeholder="e.g., type 2 diabetes, cardiovascular disease, anxiety"
+                            required
+                            class="search-input"
+                        >
+                        <input type="hidden" name="output_type" value="text">
+                        <button type="submit" class="btn-search">Search & Explain</button>
+                    </div>
+                    <p class="form-hint">
+                        {% if role == "professional" or role == "manager" or role == "admin" %}
+                        ✓ You'll receive professional-level explanations with detailed clinical information.
+                        {% else %}
+                        ✓ You'll receive simple, easy-to-understand explanations.
+                        {% endif %}
+                    </p>
+                </form>
+            </section>
+
+            <!-- Video Generation Section -->
+            <section id="video-generation" class="content-section">
+                <div class="section-header">
+                    <h3>🎬 Video Generation</h3>
+                    <p>Get AI-generated video scripts for educational content</p>
+                </div>
+
+                <form method="post" action="/video-explanation" class="search-form">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            name="topic" 
+                            placeholder="e.g., how vaccines work, healthy eating habits"
+                            required
+                            class="search-input"
+                        >
+                        <button type="submit" class="btn-search">Generate Script</button>
+                    </div>
+                    
+                    <div class="video-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="generate_video" value="true">
+                            <span class="checkmark"></span>
+                            Generate actual video (requires API key)
+                        </label>
+                    </div>
+                    
+                    <p class="form-hint">
+                        {% if role == "professional" or role == "manager" or role == "admin" %}
+                        ✓ You'll get professional video scripts (3-4 minutes).
+                        {% else %}
+                        ✓ You'll get beginner-friendly scripts (2-3 minutes).
+                        {% endif %}
+                        <br>
+                        <small style="color: #666;">💡 Video generation uses AI to create short educational videos from your scripts</small>
+                    </p>
+                </form>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="features-section">
+                <h3>⭐ Features & Access Levels</h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>🔍 Research Access</h4>
+                        <p>Access peer-reviewed research from PubMed database</p>
+                        <span class="access-badge access-all">✓ All Users</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📚 Smart Explanations</h4>
+                        <p>AI-powered explanations tailored to your expertise level</p>
+                        <span class="access-badge access-all">✓ All Users</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🎥 Video Scripts</h4>
+                        <p>Generate educational video scripts with AI</p>
+                        <span class="access-badge access-all">✓ All Users</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔗 Source Attribution</h4>
+                        <p>Direct links to original research papers</p>
+                        <span class="access-badge access-all">✓ All Users</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📋 Professional Content</h4>
+                        <p>Detailed medical terminology and clinical implications</p>
+                        {% if role == "professional" or role == "manager" or role == "admin" %}
+                        <span class="access-badge access-yes">✓ Available</span>
+                        {% else %}
+                        <span class="access-badge access-no">✗ Not Available</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📖 Beginner Mode</h4>
+                        <p>Simple explanations for general audiences</p>
+                        {% if role == "beginner" %}
+                        <span class="access-badge access-yes">✓ Your Default</span>
+                        {% else %}
+                        <span class="access-badge access-no">✗ Not Your Default</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Information Section -->
+            <section class="info-section">
+                <h3>ℹ️ Information</h3>
+                <div class="info-box">
+                    <p><strong>🏥 About This Tool:</strong> The Health Explainer Agent helps you understand medical research in your preferred language level.</p>
+                    
+                    <p><strong>⚠️ Disclaimer:</strong> This tool provides educational information only and is not a substitute for professional medical advice. Always consult a healthcare provider for medical concerns.</p>
+                    
+                    <p><strong>📚 Data Source:</strong> All research abstracts are from PubMed, the free full-text archive of biomedical and life sciences journal literature.</p>
+                    
+                    <p><strong>🤖 AI-Powered:</strong> Explanations are generated using OpenAI's GPT technology tailored to your expertise level.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    {% else %}
+    <!-- Simplified User Dashboard for non-admin/manager -->
+    <div class="simple-dashboard">
+        <div class="simple-header">
+            <h1>Welcome to Health Agent, {{ username | capitalize }}! 👋</h1>
+            <p class="simple-subtitle">Discover and understand health topics with AI-powered explanations</p>
+        </div>
+
+        <div class="simple-content">
+            <!-- Quick Search Section -->
+            <div class="search-section">
+                <h2>🔍 Search Health Topics</h2>
+                <p>Enter any health topic to get personalized explanations and research insights</p>
+                
+                <form method="post" action="/explain" class="simple-search-form">
+                    <div class="search-input-group">
+                        <input 
+                            type="text" 
+                            name="topic" 
+                            placeholder="e.g., diabetes, heart disease, mental health, vaccines..."
+                            required
+                            class="simple-search-input"
+                        >
+                        <input type="hidden" name="output_type" value="text">
+                        <button type="submit" class="simple-search-btn">Search & Learn</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Video Section -->
+            <div class="video-section">
+                <h2>🎬 Create Educational Videos</h2>
+                <p>Generate AI-powered video scripts for health education</p>
+                
+                <form method="post" action="/video-explanation" class="simple-video-form">
+                    <div class="search-input-group">
+                        <input 
+                            type="text" 
+                            name="topic" 
+                            placeholder="e.g., healthy eating, exercise benefits, stress management..."
+                            required
+                            class="simple-search-input"
+                        >
+                        <button type="submit" class="simple-video-btn">Generate Script</button>
+                    </div>
+                    
+                    <div class="video-options-simple">
+                        <label class="checkbox-label-simple">
+                            <input type="checkbox" name="generate_video" value="true">
+                            Generate actual video
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Simple Info -->
+            <div class="simple-info">
+                <div class="info-card">
+                    <h3>ℹ️ How It Works</h3>
+                    <ul>
+                        <li><strong>Search:</strong> Enter any health topic you're curious about</li>
+                        <li><strong>Learn:</strong> Get AI explanations tailored to your understanding level</li>
+                        <li><strong>Explore:</strong> Access real research from PubMed database</li>
+                        <li><strong>Create:</strong> Generate educational video scripts</li>
+                    </ul>
+                </div>
+                
+                <div class="disclaimer-card">
+                    <h3>⚠️ Important Note</h3>
+                    <p>This tool provides educational information only. For medical advice, please consult healthcare professionals.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        // Smooth scroll for section links
+        document.querySelectorAll('[data-section]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = document.querySelector('#' + link.getAttribute('data-section') + '-generation') 
+                                || document.querySelector('#' + link.getAttribute('data-section'));
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

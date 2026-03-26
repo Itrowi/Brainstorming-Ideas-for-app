@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Health Explainer Agent</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/results.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>🏥 Health Agent</h1>
+            </div>
+            <div class="nav-user">
+                <span class="user-info">
+                    <strong>{{ username }}</strong>
+                    <span class="role-badge role-{{ role }}">{{ role | upper }}</span>
+                </span>
+                <a href="/logout" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="results-container">
+        <div class="results-header">
+            <a href="/dashboard" class="btn-back">← Back to Dashboard</a>
+            <h1>Results for "{{ topic }}"</h1>
+            <p class="results-subtitle">
+                {% if role == "professional" or role == "manager" or role == "admin" %}
+                Showing professional-level explanations
+                {% else %}
+                Showing beginner-friendly explanations
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Disease Overview Section -->
+        {% if disease_overview %}
+        <div class="disease-overview-section">
+            <div class="overview-card">
+                <h2>📋 Quick Overview: {{ topic | title }}</h2>
+                <div class="overview-content">
+                    <p>{{ disease_overview }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="results-heading">
+            <h2>Research & Detailed Explanations</h2>
+        </div>
+        <div class="results-list">
+            {% for result in results %}
+            <div class="result-card">
+                <div class="result-header">
+                    <h3>{{ result.title }}</h3>
+                    <span class="pmid-badge">PMID: {{ result.pmid }}</span>
+                </div>
+
+                <div class="result-content">
+                    <p class="explanation-text">{{ result.explanation }}</p>
+                </div>
+
+                <div class="result-footer">
+                    <a href="{{ result.pubmed_url }}" target="_blank" rel="noopener noreferrer" class="source-link">
+                        🔗 View Original Research on PubMed
+                    </a>
+                </div>
+
+                <div class="copy-button-container">
+                    <button class="btn-copy" onclick="copyToClipboard(this, '{{ result.explanation | replace('\'', '\\\'') }}')">
+                        📋 Copy Explanation
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="results-actions">
+            <a href="/dashboard" class="btn-new-search">🔍 New Search</a>
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>No results found for "{{ topic }}". Try a different search term.</p>
+            <a href="/dashboard" class="btn-back">← Back to Dashboard</a>
+        </div>
+        {% endif %}
+
+        <div class="disclaimer-section">
+            <p class="disclaimer">
+                <strong>⚠️ Disclaimer:</strong> This information is educational only and not a substitute for professional medical advice. 
+                Always consult a healthcare provider for medical concerns.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy text');
+            });
+        }
+    </script>
+</body>
+</html>

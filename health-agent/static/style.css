@@ -1,0 +1,311 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+/* Role Badge */
+.role-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+}
+
+.role-badge.role-admin {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.role-badge.role-manager {
+    background: rgba(144, 202, 249, 0.3);
+    border: 1px solid rgba(144, 202, 249, 0.5);
+}
+
+.role-badge.role-professional {
+    background: rgba(100, 181, 246, 0.3);
+    border: 1px solid rgba(100, 181, 246, 0.5);
+}
+
+.role-badge.role-beginner {
+    background: rgba(66, 165, 245, 0.3);
+    border: 1px solid rgba(66, 165, 245, 0.5);
+}
+
+/* Buttons */
+.btn-logout {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-login,
+.btn-search,
+.btn-back,
+.btn-new-search,
+.btn-copy {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-login:hover,
+.btn-search:hover,
+.btn-back:hover,
+.btn-new-search:hover,
+.btn-copy:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn-copy {
+    background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.btn-copy:hover {
+    box-shadow: 0 6px 20px rgba(66, 165, 245, 0.4);
+}
+
+.btn-copy.copied {
+    background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+}
+
+.btn-download {
+    background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+    margin-left: 10px;
+}
+
+.btn-download:hover {
+    box-shadow: 0 6px 20px rgba(66, 165, 245, 0.4);
+}
+
+/* Containers */
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.search-input:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+.form-hint {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 8px;
+}
+
+/* Text & Utilities */
+h1, h2, h3, h4 {
+    color: #222;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+.note,
+.disclaimer {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 12px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-left: 4px solid #1976d2;
+    border-radius: 4px;
+}
+
+.error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Links */
+a {
+    color: #1976d2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #1565c0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-user {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .btn-copy,
+    .btn-download {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+}
+

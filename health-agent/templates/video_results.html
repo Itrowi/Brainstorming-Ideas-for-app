@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Scripts - Health Explainer Agent</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/results.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>🏥 Health Agent</h1>
+            </div>
+            <div class="nav-user">
+                <span class="user-info">
+                    <strong>{{ username }}</strong>
+                    <span class="role-badge role-{{ role }}">{{ role | upper }}</span>
+                </span>
+                <a href="/logout" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="results-container">
+        <div class="results-header">
+            <a href="/dashboard" class="btn-back">← Back to Dashboard</a>
+            <h1>Video Scripts for "{{ topic }}"</h1>
+            <p class="results-subtitle">
+                {% if role == "professional" or role == "manager" or role == "admin" %}
+                Professional video scripts (3-4 minutes)
+                {% else %}
+                Beginner-friendly video scripts (2-3 minutes)
+                {% endif %}
+            </p>
+        </div>
+
+        {% if results %}
+        <div class="results-list">
+            {% for result in results %}
+            <div class="result-card video-card">
+                <div class="result-header">
+                    <h3>{{ result.title }}</h3>
+                    <span class="pmid-badge">PMID: {{ result.pmid }}</span>
+                </div>
+
+                <div class="video-script-section">
+                    <div class="script-header">
+                        <h4>📝 Video Script</h4>
+                        <span class="script-duration">
+                            {% if role == "professional" or role == "manager" or role == "admin" %}
+                            ~3-4 minutes
+                            {% else %}
+                            ~2-3 minutes
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="script-content">
+                        <p>{{ result.video_script }}</p>
+                    </div>
+                </div>
+
+                {% if result.video_url %}
+                <div class="generated-video-section">
+                    <div class="video-header">
+                        <h4>🎬 Generated Video</h4>
+                        <span class="video-status">AI-Generated Content</span>
+                    </div>
+                    <div class="video-content">
+                        {% if result.video_url.startswith('http') %}
+                        <video controls class="generated-video">
+                            <source src="{{ result.video_url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-actions">
+                            <a href="{{ result.video_url }}" target="_blank" class="btn-download-video">
+                                ⬇️ Download Video
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="video-error">
+                            <p>{{ result.video_url }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="result-footer">
+                    <a href="{{ result.pubmed_url }}" target="_blank" rel="noopener noreferrer" class="source-link">
+                        🔗 View Original Research on PubMed
+                    </a>
+                </div>
+
+                <div class="copy-button-container">
+                    <button class="btn-copy" onclick="copyToClipboard(this, '{{ result.video_script | replace('\'', '\\\'') }}')">
+                        📋 Copy Script
+                    </button>
+                    <button class="btn-copy btn-download" onclick="downloadScript('{{ result.title }}.txt', '{{ result.video_script | replace('\'', '\\\'') }}')">
+                        ⬇️ Download Script
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="results-actions">
+            <a href="/dashboard" class="btn-new-search">🎬 Generate New Script</a>
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>No results found for "{{ topic }}". Try a different search term.</p>
+            <a href="/dashboard" class="btn-back">← Back to Dashboard</a>
+        </div>
+        {% endif %}
+
+        <div class="disclaimer-section">
+            <p class="disclaimer">
+                <strong>⚠️ Disclaimer:</strong> This video script is generated for educational purposes only. 
+                Always verify information with credible medical sources and consult healthcare professionals.
+            </p>
+
+            <div class="video-tips">
+                <h4>💡 Tips for Creating Videos from These Scripts:</h4>
+                <ul>
+                    <li>Use clear, professional audio when narrating</li>
+                    <li>Add relevant visuals and animations to match the script</li>
+                    <li>Include proper citations to the original research</li>
+                    <li>Consider adding on-screen text for key points</li>
+                    <li>Use tools like Adobe Premiere, DaVinci Resolve, or free alternatives like OBS Studio</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy text');
+            });
+        }
+
+        function downloadScript(filename, text) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
+</body>
+</html>
